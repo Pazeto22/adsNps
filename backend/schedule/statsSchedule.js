@@ -5,6 +5,8 @@ module.exports = (app) => {
     const usersCount = await app.db("users").count("id").first();
     const categoriesCount = await app.db("categories").count("id").first();
     const articlesCount = await app.db("articles").count("id").first();
+    const generosCount = await app.db("generos").count("id").first();
+    const livrosCount = await app.db("livros").count("id").first();
 
     const { Stat } = app.api.stat;
 
@@ -14,6 +16,8 @@ module.exports = (app) => {
       users: usersCount.count,
       categories: categoriesCount.count,
       articles: articlesCount.count,
+      generos: generosCount.count,
+      livros: livrosCount.count,
       createdAt: new Date(),
     });
 
