@@ -7,7 +7,7 @@ module.exports = (app) => {
 
   function notExistsOrError(value, msg) {
     try {
-      existOrError(value, msg);
+      existsOrError(value, msg);
     } catch (msg) {
       return;
     }

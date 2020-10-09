@@ -10,21 +10,22 @@ module.exports = (app) => {
 
   const save = async (req, res) => {
     const user = { ...req.body };
+
     if (req.params.id) user.id = req.params.id;
     try {
       existsOrError(user.name, "Nome não informado");
-      existsOrError(user.email, "Email não informado");
+      existsOrError(user.email, "E-mail nao informado");
       existsOrError(user.password, "Senha não informada");
-      existsOrError(user.confirmPassword, "Confirmação de senha inválida");
+      existsOrError(user.confirmPassword, "Confirmação de Senha inválida");
       equalsOrError(user.password, user.confirmPassword, "Senhas não conferem");
 
-      const userFromDb = await app
+      const userFromDB = await app
         .db("users")
         .where({ email: user.email })
         .first();
 
       if (!user.id) {
-        notExistsOrError(userFromDb, "Usuário já está cadastrado");
+        notExistsOrError(userFromDB, "Usuário já cadastrado");
       }
     } catch (msg) {
       return res.status(400).send(msg);
@@ -39,13 +40,13 @@ module.exports = (app) => {
         .update(user)
         .where({ id: user.id })
         .then((_) => res.status(204).send())
-        .catch((erro) => res.status(500).send(erro));
+        .catch((err) => res.status(500).send(err));
     } else {
       app
         .db("users")
         .insert(user)
         .then((_) => res.status(204).send())
-        .catch((erro) => res.status(500).send(erro));
+        .catch((err) => res.status(500).send(err));
     }
   };
 
@@ -54,15 +55,17 @@ module.exports = (app) => {
       .db("users")
       .select("id", "name", "email", "admin")
       .then((users) => res.json(users))
-      .catch((erro) => res.status(500).send(erro));
+      .catch((err) => res.status(500).send(err));
   };
 
   const getById = (req, res) => {
     app
       .db("users")
       .select("id", "name", "email", "admin")
-      .then((users) => res.json(users))
-      .catch((erro) => res.status(500).send(erro));
+      .where({ id: req.params.id })
+      .first()
+      .then((user) => res.json(user))
+      .catch((err) => res.status(500).send(err));
   };
 
   return { save, get, getById };
