@@ -1,9 +1,13 @@
-import Vue from 'vue'
+import Vue from "vue";
+import "font-awesome/css/font-awesome.css";
 
-import App from './App'
+import App from "./App";
+import store from "./config/store";
+import "./config/bootstrap";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App)
-}).$mount('#app')
+  store,
+  render: (h) => h(App),
+}).$mount("#app");
